@@ -1,4 +1,8 @@
-// .babelrc
 {
-  "plugins": [["import", [{ "libraryName": "antd", "style": true }]]]
+  "plugins": [
+    ["import", {
+      style: 'css',  // 'less',
+      libraryName: 'antd-mobile',
+    }]
+  ]
 }

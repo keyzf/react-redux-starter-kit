@@ -10,6 +10,9 @@ var OpenBrowserPlugin = require('open-browser-webpack-plugin');
 
 var node_modules_dir = path.resolve(__dirname, 'node_modules');
 
+var autoprefixer = require('autoprefixer')
+var pxtorem = require('postcss-pxtorem');
+
 /* 
  * 用于分析模块的共用代码
  * https://github.com/webpack/docs/wiki/optimization#multi-page-app
@@ -159,7 +162,7 @@ var config = {
         exclude: [node_modules_dir]
       },{
         test: /\.(less|css)$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css!less')
+        loader: ExtractTextPlugin.extract('style-loader', 'css!less!postcss')
         // ?importLoaders=1!autoprefixer
         // importLoaders=1 解决autoprefixer css less 中存在的bug
       },
@@ -178,7 +181,7 @@ var config = {
     ]
   },
   resolve:{
-    extensions:['','.js','.jsx'], // 可以忽略的后缀名
+    extensions:['', '.web.js', '.js','.jsx'], // 可以忽略的后缀名
     alias: {
       //后续直接 require('Utils') 即可
       Utils : path.resolve(__dirname, './src/common/utils/utils.js'),
@@ -189,6 +192,10 @@ var config = {
     }
   },
   plugins: plugins,
+  postcss: [autoprefixer, pxtorem({
+    rootValue: 100,
+    propWhiteList: [],
+  })],
   devtool: isProduction() ? null : 'source-map'
 }
 
